@@ -5,7 +5,7 @@ def handler(event, context):
     return {
         "isBase64Encoded": False,
         "statusCode": 200,
-        "body": json.dumps("Hello from Lambda!"),
+        "body": json.dumps("Goodbye Lambda!"),
         "headers": {
             "content-type": "application/json"
         }

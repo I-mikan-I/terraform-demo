@@ -18,10 +18,16 @@ resource "aws_s3_bucket" "tf_lambda_bucket" {
 
 module "gateway" {
   source = "./apigateway"
-  integrations = [{
-    arn   = module.my_fun.arn
-    route = "/echo"
-  }]
+  integrations = [
+    {
+      arn   = module.hello_lambda.arn
+      route = "/hello"
+    },
+    {
+      arn   = module.goodbye_lambda.arn
+      route = "/goodbye"
+    }
+  ]
 }
 
 module "exec_role" {
@@ -29,11 +35,20 @@ module "exec_role" {
 }
 
 
-module "my_fun" {
+module "hello_lambda" {
   source        = "./lambda"
   bucket-name   = aws_s3_bucket.tf_lambda_bucket.id
-  function-name = "tf-function"
+  function-name = "tf-hello"
   role-arn      = module.exec_role.role.arn
-  code-path     = "../code"
+  code-path     = "../code/hello"
+  source-arn    = "${module.gateway.execution-arn}/*/*"
+}
+
+module "goodbye_lambda" {
+  source        = "./lambda"
+  bucket-name   = aws_s3_bucket.tf_lambda_bucket.id
+  function-name = "tf-goodbye"
+  role-arn      = module.exec_role.role.arn
+  code-path     = "../code/goodbye"
   source-arn    = "${module.gateway.execution-arn}/*/*"
 }
