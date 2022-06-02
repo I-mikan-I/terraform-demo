@@ -5,6 +5,12 @@ terraform {
       version = "~> 4.16.0"
     }
   }
+  # backend "s3" {
+  #   bucket         = "tf-state-33678"
+  #   key            = "state"
+  #   dynamodb_table = "tf-lock"
+  #   region         = "eu-central-1"
+  # }
 }
 
 provider "aws" {
